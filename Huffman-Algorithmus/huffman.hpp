@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <math.h>
 
 typedef double prob;
 
@@ -31,15 +32,18 @@ public:
     /* GETTER */
 
     /* get average wordlength */
-    //double gawl();
+    double gawl();
     /* get redundancy */
-    //double gred();
+    double gred();
     /* get average (information) content */
-    //double gaic();
+    double gaic();
     /* get coding of an char as string */
     std::string gcocStr(char c);
     /* get coding of an char as integer */
     // int gcocInt(char c);
+
+    /* show all encoded chars and their codes */
+    void showAll();
 
 
 private:

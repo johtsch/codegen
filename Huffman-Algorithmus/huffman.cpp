@@ -67,10 +67,11 @@ void HuffmanCoder::genCode(std::map<char, int> nodes){
     std::map<char, int>::iterator it = nodes.begin();
     int largest = 0;
     /* find the largest nodeidentifier */
-    for(it; it != nodes.end(); ++it){
+    for(it = nodes.begin(); it != nodes.end(); ++it){
         if(it->second > largest)    
             largest = it->second;
     }
+
     /* escape */
     if(largest == 0)
         return;
@@ -84,6 +85,7 @@ void HuffmanCoder::genCode(std::map<char, int> nodes){
                 nodeprob+=_probmap[it->first];
             }
         }
+
         probs.push_back(nodeprob);
     }
 
@@ -101,6 +103,8 @@ void HuffmanCoder::genCode(std::map<char, int> nodes){
             sma2 = sma1;
             sma1 = i;
         }
+        if(i != sma2 && probs[i] <= probs[sma2] && i != sma1)
+            sma2 = i;
     }
 
     /* sma1 has to be smaller than sma2. if not change the values 
@@ -121,9 +125,11 @@ void HuffmanCoder::genCode(std::map<char, int> nodes){
         }
         else if(it->second > sma2)    
             it->second -= 1;                /* - 1 since there is now exactly 1 node missing */
+
+        //std::cout << "\t[D] nodeid = " << it->second << std::endl;
     }
 
-
+    //std::cout << "\t[D] next call" << std::endl;
 
     /* recursion */
     genCode(nodes);
@@ -133,4 +139,39 @@ std::string HuffmanCoder::gcocStr(char c){
     if(_codemap.find(c) == _codemap.end())
         return "";
     return _codemap[c];
+}
+
+/* GETTER */
+
+double HuffmanCoder::gred(){
+    return gawl() - gaic();
+}
+
+
+double HuffmanCoder::gawl(){
+    std::map<char, std::string>::iterator it;
+    double avwl = 0.0;
+    for(it = _codemap.begin(); it != _codemap.end(); ++it){
+        avwl+=it->second.size() * _probmap[it->first];
+    }
+
+    return avwl;
+}
+
+double HuffmanCoder::gaic(){
+    std::map<char, double>::iterator it;
+    double aic = 0.0;
+    for(it = _probmap.begin(); it != _probmap.end(); ++it){
+        aic += it->second * log(1/it->second)/log(2.0);
+    }
+
+    return aic;
+}
+
+void HuffmanCoder::showAll(){
+    std::map<char, std::string>::iterator it;
+    
+    for(it = _codemap.begin(); it != _codemap.end(); ++it){
+        std::cout << "'" << it->first << "'  ->  '" << it->second << "'  ->  " << _probmap[it->first] << std::endl; 
+    }
 }
