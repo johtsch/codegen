@@ -29,6 +29,9 @@ public:
     void calcProbs();
     void fireup();
 
+    /*returns msg in readable code */
+    std::string encodeMsg(std::string msg);
+
     /* GETTER */
 
     /* get average wordlength */
@@ -44,6 +47,7 @@ public:
 
     /* show all encoded chars and their codes */
     void showAll();
+    void showAllSorted();
 
 
 private:

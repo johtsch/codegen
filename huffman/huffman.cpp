@@ -54,6 +54,18 @@ void HuffmanCoder::fireup(){
     genCode(nodes);
 }
 
+std::string HuffmanCoder::encodeMsg(std::string msg){
+    std::string cmsg;   
+    for(int i = 0; i < msg.length(); ++i){
+        if(gcocStr(msg[i]) != "")
+            cmsg+=gcocStr(msg[i]);
+        else    
+            cmsg+=msg[i];
+    }
+
+    return cmsg;
+}
+
 void HuffmanCoder::alterProbs(){
     std::map<char, prob>::iterator it;
 
@@ -173,5 +185,33 @@ void HuffmanCoder::showAll(){
     
     for(it = _codemap.begin(); it != _codemap.end(); ++it){
         std::cout << "'" << it->first << "'  ->  '" << it->second << "'  ->  " << _probmap[it->first] << std::endl; 
+    }
+}
+
+void HuffmanCoder::showAllSorted(){
+    double lsp = 0.0;
+    char lchr = '\0';
+    double csp = 12;           /* current smallest probability */
+    char csc = '\0';
+    bool found = false;
+    std::map<char, double>::iterator it;
+    std::string used = "";
+
+    while(true){
+        found = false;
+        csp=10.0;
+        for(it = _probmap.begin(); it != _probmap.end(); ++it){
+            if(it->second < csp && it->second >= lsp && used.find(it->first) == std::string::npos){
+                csp = it->second;
+                found = true;
+                csc = it->first;
+            }
+        }   
+        // if no new smaller value has been found break loop
+        if(!found)
+            break;
+        lsp = csp;
+        used+=csc;
+        std::cout << "'" << csc << "'  ->  '" << _codemap[csc] << "'  ->  " << _probmap[csc] << std::endl; 
     }
 }
